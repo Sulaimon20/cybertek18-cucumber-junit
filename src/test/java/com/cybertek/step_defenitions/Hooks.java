@@ -1,9 +1,9 @@
 package com.cybertek.step_defenitions;
 
-import io.cucumber.java.After;
-import io.cucumber.java.AfterStep;
-import io.cucumber.java.Before;
-import io.cucumber.java.BeforeStep;
+import com.cybertek.utilities.Driver;
+import io.cucumber.java.*;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 
 public class Hooks {
 
@@ -18,8 +18,23 @@ public class Hooks {
     }
 
     @After(order = 1)
-    public void tearDownScenario(){
-        System.out.println("-----> After annotation: Closing browser");
+    public void tearDownScenario(Scenario scenario){
+        //System.out.println("-----> After annotation: Closing browser");
+
+       // System.out.println("scenario.getName() = " + scenario.getName());
+       // System.out.println("scenario.getSourceTagNames() = " + scenario.getSourceTagNames());
+       // System.out.println("scenario.isFailed() = " + scenario.isFailed());
+
+        //#1 we need to take a screen shot using Selenium
+        // #2 we are going to attach it into our report using attach method
+        //attach method accept 3 arguments:
+                //1)screenshot; 2) image type; 3) current scenario's name
+        if (scenario.isFailed()) {
+            byte[] screenshot = ((TakesScreenshot) Driver.getDriver()).getScreenshotAs(OutputType.BYTES);
+            scenario.attach(screenshot, "image/png", scenario.getName());
+        }
+
+
     }
 
     @After(value = "@db", order = 2 )
@@ -30,6 +45,7 @@ public class Hooks {
     @BeforeStep
     public void setUpStep(){
         System.out.println("===========> BEFORESTEP: TAKING SCREENSHOT <===========");
+
     }
 
     @AfterStep

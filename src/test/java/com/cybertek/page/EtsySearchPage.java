@@ -5,20 +5,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class WikipediaSearchPage {
+public class EtsySearchPage {
 
-    public WikipediaSearchPage(){
+    public EtsySearchPage(){
         PageFactory.initElements(Driver.getDriver(), this);
     }
 
-    @FindBy(id = "searchInput")
+    @FindBy(name = "search_query")
     public WebElement searchBox;
 
-    @FindBy(id = "firstHeading")
-    public WebElement mainHeaderAfterSearch;
+    @FindBy(xpath = "(//button[@type='submit'])[1]")
+    public WebElement submitButton;
 
-    @FindBy(className = "fn")
-    public WebElement imageHeaderAfterSearch;
 
-    //BREAK UNTIL 2.06PM EST
 }

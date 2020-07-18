@@ -6,47 +6,51 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.Keys;
 
 public class WikipediaStepdefs {
 
-    //creating POM
-    WikipediaSearchPage wikisearch=new WikipediaSearchPage();
+    WikipediaSearchPage wikiSearchPage = new WikipediaSearchPage();
 
-    @Given("User is on the Wikipedia home search page")
-    public void user_is_on_the_wikipedia_home_search_page() {
+    @Given("User is on the Wikipedia home page")
+    public void user_is_on_the_wikipedia_home_page() {
+
         Driver.getDriver().get("https://www.wikipedia.org");
 
     }
 
 
-    @When("User types Steve Jobs in the wiki search box")
-    public void user_types_steve_jobs_in_the_wiki_search_box() {
-        wikisearch.searchBox.sendKeys("Steve Jobs");
-    }
+    @When("User searches {string} in the wiki search page")
+    public void user_searches_in_the_wiki_search_page(String string) {
 
-    @When("User clicks wiki search button")
-    public void user_clicks_wiki_search_button() {
-        wikisearch.submitButton.click();
-    }
-    @Then("User sees Steve Jobs is in the wiki title")
-    public void user_sees_steve_jobs_is_in_the_wiki_title() {
-        String expectedTitle="Steve Jobs - Wikipedia";
-        String actualTitle=Driver.getDriver().getTitle();
-        Assert.assertEquals(actualTitle,expectedTitle);
-    }
-
-    @Then("User sees Steve Jobs is in the main header")
-    public void userSeesSteveJobsIsInTheMainHeader() {
-    String expectedMainHeader="Steve Jobs";
-    String actualMainHeader=wikisearch.mainHeader.getText();
-    Assert.assertTrue(actualMainHeader.contains(expectedMainHeader));
+        wikiSearchPage.searchBox.sendKeys(string + Keys.ENTER);
 
     }
 
-    @Then("User sees Steve Jobs  is in the image header")
-    public void userSeesSteveJobsIsInTheImageHeader() {
-        WebElement image=wikisearch.steveJobsPics;
-        Assert.assertTrue(image.isDisplayed());
+    @Then("User should see {string} in the wiki title")
+    public void user_should_see_in_the_wiki_title(String expectedInTitle) {
+        String actualTitle = Driver.getDriver().getTitle();
+
+        Assert.assertTrue(actualTitle.contains(expectedInTitle));
+
+    }
+
+    @Then("User should see {string} in the main header")
+    public void userShouldSeeInTheMainHeader(String expected) {
+
+        String actualHeaderText = wikiSearchPage.mainHeaderAfterSearch.getText();
+
+        Assert.assertEquals(actualHeaderText, expected);
+
+    }
+
+    @Then("User should see {string} in the image header")
+    public void userShouldSeeInTheImageHeader(String arg) {
+
+        String actualHeader = wikiSearchPage.imageHeaderAfterSearch.getText();
+        String expectedHeader = arg;
+
+        Assert.assertEquals(actualHeader, expectedHeader);
+
     }
 }
